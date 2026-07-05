@@ -234,6 +234,30 @@ class Bot extends EventEmitter {
 
     }
 
+    async runScript(code) {
+
+        if (!this.connected || !this.bot)
+            return false;
+
+        const bot = this.bot;
+
+        try {
+            const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor;
+            const fn = new AsyncFunction("bot", code);
+
+            await fn(bot);
+
+            logger.success(`${this.username}: script ok`);
+
+            return true;
+
+        } catch (err) {
+            logger.error(`${this.username}: script failed: ${err.message}`);
+            return false;
+        }
+
+    }
+
     get uptime() {
 
         if (!this.connectedAt)

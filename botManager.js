@@ -83,6 +83,17 @@ class BotManager extends EventEmitter {
         }
     }
 
+    runScript(target, code) {
+        const bots = target && target !== "all" && this.bots.has(target)
+            ? [this.bots.get(target)]
+            : this.onlineBots();
+
+        for (const bot of bots) {
+            if (bot.connected)
+                bot.runScript(code);
+        }
+    }
+
     restartBot(username) {
         const bot = this.bots.get(username);
 

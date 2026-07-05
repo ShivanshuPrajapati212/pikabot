@@ -39,14 +39,14 @@ module.exports = function (screen, manager) {
         keyable: true,
         mouse: true,
 
-        content: " (press : — run setQuickBarSlot 4, run activateItem)"
+        content: " (press : — run <method>, js <code>)"
     });
 
     function renderLine() {
         if (active)
             input.setContent(` ${buffer}_`);
         else
-            input.setContent(" (press : — run setQuickBarSlot 4, run activateItem)");
+            input.setContent(" (press : — run <method>, js <code>)");
     }
 
     function deactivate() {
@@ -74,16 +74,45 @@ module.exports = function (screen, manager) {
         screen.render();
     }
 
+    function parseScriptCommand(command) {
+        const trimmed = command.trim();
+        let rest = trimmed.slice(2).trim();
+
+        let target = "all";
+
+        if (rest.startsWith("all ")) {
+            rest = rest.slice(4).trim();
+        } else {
+            const first = rest.split(/\s+/)[0];
+
+            if (first && manager.get(first)) {
+                target = first;
+                rest = rest.slice(first.length).trim();
+            }
+        }
+
+        return { target, code: rest };
+    }
+
     function execute(command) {
 
-        const parts = command.trim().split(/\s+/);
-
+        const trimmed = command.trim();
+        const parts = trimmed.split(/\s+/);
         const cmd = parts.shift();
 
         if (!cmd)
             return;
 
         switch (cmd) {
+
+            case "js": {
+                const { target, code } = parseScriptCommand(trimmed);
+
+                if (code)
+                    manager.runScript(target, code);
+
+                break;
+            }
 
             case "say":
                 manager.broadcast(parts.join(" "));
