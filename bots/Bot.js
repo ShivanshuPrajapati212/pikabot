@@ -153,7 +153,8 @@ class Bot extends EventEmitter {
 
 
         this.bot.on('windowOpen', async (window) => {
-            if (window.title.value.includes('Server Selector')) {
+            const title = typeof window.title === 'string' ? window.title : JSON.stringify(window.title || {});
+            if (title.includes('Server Selector')) {
                 await this.bot.clickWindow(10, 0, 0);
                 logger.success("Clicked on Op Factions")
             }

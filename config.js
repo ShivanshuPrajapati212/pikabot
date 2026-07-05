@@ -5,8 +5,8 @@ module.exports = {
     version: "1.20.1",
 
     reconnectDelay: {
-        min: 3000,
-        max: 6000
+        min: 500,
+        max: 1000
     },
 
     dashboardRefreshRate: 500,
