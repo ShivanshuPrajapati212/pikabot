@@ -58,7 +58,7 @@ class Bot extends EventEmitter {
             this.connected = true;
             this.connecting = false;
 
-            this.state = "Idle";
+            this.state = "Online";
 
             this.connectedAt = Date.now();
 
@@ -89,7 +89,7 @@ class Bot extends EventEmitter {
 
             this.reconnects++;
 
-            this.state = `Reconnect (${Math.floor(delay / 1000)}s)`;
+            this.state = "Reconnecting";
 
             setTimeout(() => {
 

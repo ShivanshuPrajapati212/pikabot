@@ -29,20 +29,18 @@ module.exports = function (screen) {
     });
 
     function icon(status) {
-        switch (status.toLowerCase()) {
+        const normalized = status.toLowerCase();
 
-            case "online":
-                return "🟢 Online";
+        if (normalized === "online" || normalized === "idle")
+            return "🟢 Online";
 
-            case "connecting":
-                return "🟡 Connecting";
+        if (normalized === "connecting")
+            return "🟡 Connecting";
 
-            case "reconnecting":
-                return "🟣 Reconnecting";
+        if (normalized === "reconnecting" || normalized.startsWith("reconnect"))
+            return "🟣 Reconnecting";
 
-            default:
-                return "🔴 Offline";
-        }
+        return "🔴 Offline";
     }
 
     function format(ms) {
