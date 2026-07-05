@@ -2,7 +2,7 @@ module.exports = {
     host: "pika.host",
     port: 25565,
 
-    version: false,
+    version: "1.20.1",
 
     reconnectDelay: {
         min: 3000,

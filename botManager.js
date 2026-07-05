@@ -29,7 +29,7 @@ class BotManager extends EventEmitter {
         bot.on("spawn", forward("spawn"));
         bot.on("disconnect", forward("disconnect"));
         bot.on("chat", forward("chat"));
-        bot.on("error", forward("error"));
+        bot.on("botError", forward("botError"));
         bot.on("kicked", forward("kicked"));
         bot.on("update", forward("botUpdate"));
     }

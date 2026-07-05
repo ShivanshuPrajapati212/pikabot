@@ -101,9 +101,11 @@ class Bot extends EventEmitter {
 
         this.bot.on("error", err => {
 
+            this.connecting = false;
+
             logger.error(`${this.username}: ${err.message}`);
 
-            this.emit("error", err);
+            this.emit("botError", err);
 
         });
 
