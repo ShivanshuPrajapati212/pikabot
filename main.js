@@ -3,7 +3,7 @@ const mineflayer = require('mineflayer')
 const bot = mineflayer.createBot({
   host: 'pika.host',
   port: 25565,
-  username: 'shivanshu39'
+  username: 'shivnashu398'
 })
 
 bot.once('spawn', () => {
