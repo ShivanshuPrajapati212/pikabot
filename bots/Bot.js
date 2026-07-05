@@ -202,6 +202,38 @@ class Bot extends EventEmitter {
 
     }
 
+    run(method, ...args) {
+
+        if (!this.connected || !this.bot)
+            return false;
+
+        const fn = this.bot[method];
+
+        if (typeof fn !== "function") {
+            logger.error(`${this.username}: unknown method ${method}`);
+            return false;
+        }
+
+        try {
+            const result = fn.apply(this.bot, args);
+
+            logger.success(`${this.username}: ${method}(${args.join(", ")})`);
+
+            if (result && typeof result.then === "function") {
+                result.catch(err => {
+                    logger.error(`${this.username}: ${method} failed: ${err.message}`);
+                });
+            }
+
+            return true;
+
+        } catch (err) {
+            logger.error(`${this.username}: ${method} failed: ${err.message}`);
+            return false;
+        }
+
+    }
+
     get uptime() {
 
         if (!this.connectedAt)

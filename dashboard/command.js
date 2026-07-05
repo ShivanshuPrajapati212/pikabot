@@ -1,5 +1,24 @@
 const blessed = require("blessed");
 
+function parseArgs(parts) {
+    return parts.map(part => {
+        if (/^-?\d+(\.\d+)?$/.test(part))
+            return Number(part);
+
+        if (part === "true")
+            return true;
+
+        if (part === "false")
+            return false;
+
+        if ((part.startsWith('"') && part.endsWith('"'))
+            || (part.startsWith("'") && part.endsWith("'")))
+            return part.slice(1, -1);
+
+        return part;
+    });
+}
+
 module.exports = function (screen, manager) {
 
     let active = false;
@@ -20,14 +39,14 @@ module.exports = function (screen, manager) {
         keyable: true,
         mouse: true,
 
-        content: " (press : to type)"
+        content: " (press : — run setQuickBarSlot 4, run activateItem)"
     });
 
     function renderLine() {
         if (active)
             input.setContent(` ${buffer}_`);
         else
-            input.setContent(" (press : to type)");
+            input.setContent(" (press : — run setQuickBarSlot 4, run activateItem)");
     }
 
     function deactivate() {
@@ -98,6 +117,20 @@ module.exports = function (screen, manager) {
                 else
                     manager.disconnectBot(parts[0]);
                 break;
+
+            case "run": {
+                const target = parts[0] === "all" || manager.get(parts[0])
+                    ? parts.shift()
+                    : "all";
+
+                const method = parts.shift();
+
+                if (!method)
+                    break;
+
+                manager.run(target, method, parseArgs(parts));
+                break;
+            }
         }
     }
 
